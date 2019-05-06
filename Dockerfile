@@ -13,7 +13,7 @@ RUN curl -O ${DOWNLOAD_URL}
 RUN tar xvf unbound-${VERSION}.tar.gz
 
 WORKDIR /tmp/build/unbound-${VERSION}
-RUN ./configure --enable-tfo-server
+RUN ./configure --enable-tfo-server --enable-tfo-client
 RUN make && make install
 RUN strip -s /usr/local/sbin/unbound
 
