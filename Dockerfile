@@ -16,7 +16,14 @@ WORKDIR /tmp/build/unbound-${VERSION}
 RUN ./configure --enable-tfo-server --enable-tfo-client
 RUN make && make install
 RUN strip -s /usr/local/sbin/unbound
+RUN strip -s /usr/local/sbin/unbound-host
+RUN strip -s /usr/local/lib/libunbound.so.8
 
 FROM gcr.io/distroless/base
 COPY --from=build_env /usr/local/sbin/unbound /sbin/unbound
-ENTRYPOINT ["/sbin/unbound"]
+COPY --from=build_env /usr/local/sbin/unbound-host /sbin/unbound-host
+COPY --from=build_env /usr/local/lib/libunbound.so.8 /lib/x86_64-linux-gnu/
+
+HEALTHCHECK CMD ["/sbin/unbound-host", "-r", "g.co"]
+
+ENTRYPOINT ["/sbin/unbound", "-p"]
