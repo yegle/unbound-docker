@@ -13,7 +13,6 @@ WORKDIR /tmp/build
 RUN curl -O ${OPENSSL_URL}
 RUN tar xvf openssl-${OPENSSL_VERSION}.tar.gz
 WORKDIR /tmp/build/openssl-${OPENSSL_VERSION}
-RUN ls
 RUN ./config
 RUN make && make install
 
@@ -24,8 +23,6 @@ WORKDIR /tmp/build/unbound-${UNBOUND_VERSION}
 RUN ./configure --enable-tfo-server --enable-tfo-client
 RUN make && make install
 
-RUN ls /usr/local/lib
-RUN ldd /usr/local/sbin/unbound
 RUN strip -s /usr/local/sbin/unbound
 RUN strip -s /usr/local/sbin/unbound-host
 RUN strip -s /usr/local/lib/libunbound.so.8
