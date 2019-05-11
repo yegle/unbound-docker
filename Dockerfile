@@ -20,7 +20,7 @@ WORKDIR /tmp/build
 RUN curl -O ${UNBOUND_URL}
 RUN tar xvf unbound-${UNBOUND_VERSION}.tar.gz
 WORKDIR /tmp/build/unbound-${UNBOUND_VERSION}
-RUN ./configure --enable-tfo-server --enable-tfo-client
+RUN ./configure --enable-tfo-server --enable-tfo-client --enable-subnet
 RUN make && make install
 
 RUN strip -s /usr/local/sbin/unbound
