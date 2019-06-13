@@ -14,7 +14,7 @@ RUN curl -O ${OPENSSL_URL}
 RUN tar xvf openssl-${OPENSSL_VERSION}.tar.gz
 WORKDIR /tmp/build/openssl-${OPENSSL_VERSION}
 RUN ./config
-RUN make && make install
+RUN make install_runtime install_dev
 
 WORKDIR /tmp/build
 RUN curl -O ${UNBOUND_URL}
