@@ -1,6 +1,6 @@
 FROM debian:stretch as build_env
 
-ENV UNBOUND_VERSION 1.9.2rc2
+ENV UNBOUND_VERSION 1.9.2
 ENV OPENSSL_VERSION 1.1.1c
 
 ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz
