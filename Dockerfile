@@ -1,16 +1,18 @@
+# SOURCE_BRANCH maps to unbound version
+ARG SOURCE_BRANCH=1.9.2
+
 FROM yegle/debian-stable-with-openssl:1.1.1c as build_env
+ARG SOURCE_BRANCH
 
-ENV UNBOUND_VERSION 1.9.2
-
-ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz
+ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${SOURCE_BRANCH}.tar.gz
 
 RUN apt-get update
 RUN apt-get install -y curl build-essential libexpat-dev
 
 WORKDIR /tmp/build
 RUN curl -O ${UNBOUND_URL}
-RUN tar xvf unbound-${UNBOUND_VERSION}.tar.gz
-WORKDIR /tmp/build/unbound-${UNBOUND_VERSION}
+RUN tar xvf unbound-${SOURCE_BRANCH}.tar.gz
+WORKDIR /tmp/build/unbound-${SOURCE_BRANCH}
 RUN ./configure --enable-tfo-server --enable-tfo-client --enable-subnet
 RUN make && make install
 
