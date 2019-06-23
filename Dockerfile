@@ -1,10 +1,10 @@
-# SOURCE_BRANCH maps to unbound version
-ARG SOURCE_BRANCH=1.9.2
-
 FROM yegle/debian-stable-with-openssl:1.1.1c as build_env
 ARG SOURCE_BRANCH
+ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.9.2}
 
 ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${SOURCE_BRANCH}.tar.gz
+
+RUN echo ${UNBOUND_URL}
 
 RUN apt-get update
 RUN apt-get install -y curl build-essential libexpat-dev
