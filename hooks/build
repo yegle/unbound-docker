@@ -5,9 +5,12 @@
 
 if [[ ${SOURCE_BRANCH} == "master" ]]
 then
-    echo "=> Overriding SOURCE_BRANCH from ${SOURCE_BRANCH} to ''."
     export SOURCE_BRANCH=""
+else
+    export SOURCE_BRANCH=${SOURCE_BRANCH#v}
 fi
+
+echo "=> Overriding SOURCE_BRANCH to ${SOURCE_BRANCH}."
 
 docker build --build-arg SOURCE_BRANCH=${SOURCE_BRANCH} \
     -f ${DOCKERFILE_PATH} -t ${IMAGE_NAME} .
