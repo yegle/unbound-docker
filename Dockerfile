@@ -12,15 +12,6 @@ RUN apt-get install -y curl build-essential libexpat-dev
 WORKDIR /tmp/build
 RUN curl -O ${UNBOUND_URL}
 RUN tar xvf unbound-${SOURCE_BRANCH}.tar.gz
-
-# Temporary: fix a security issue. See
-# https://github.com/NLnetLabs/unbound/issues/49
-# TODO: delete once 1.9.3 is out.
-RUN curl -O https://github.com/NLnetLabs/unbound/commit/c94e13220b6eea8e18c8cbbea51e4e663cb079e6.patch
-# Changelog file will fail to patch.
-RUN sed -i '/^diff --git a\/doc\/Changelog/,/^diff --git/d' c94e13220b6eea8e18c8cbbea51e4e663cb079e6.patch
-RUN patch -p1 -d /tmp/build/unbound-${SOURCE_BRANCH} <c94e13220b6eea8e18c8cbbea51e4e663cb079e6.patch
-
 WORKDIR /tmp/build/unbound-${SOURCE_BRANCH}
 RUN ./configure --enable-tfo-server --enable-tfo-client --enable-subnet
 RUN make && make install
