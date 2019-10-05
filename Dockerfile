@@ -1,6 +1,6 @@
 FROM yegle/debian-stable-with-openssl:1.1.1c as build_env
 ARG SOURCE_BRANCH
-ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.9.3}
+ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.9.4}
 
 ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${SOURCE_BRANCH}.tar.gz
 
