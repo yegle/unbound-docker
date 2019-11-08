@@ -1,4 +1,4 @@
-FROM yegle/debian-stable-with-openssl:1.1.1c as build_env
+FROM debian:buster as build_env
 ARG SOURCE_BRANCH
 ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.9.4}
 
@@ -7,7 +7,7 @@ ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${SOURCE_BRANCH}.
 RUN echo ${UNBOUND_URL}
 
 RUN apt-get update
-RUN apt-get install -y curl build-essential libexpat-dev
+RUN apt-get install -y curl build-essential libexpat-dev libssl-dev
 
 WORKDIR /tmp/build
 RUN curl -O ${UNBOUND_URL}
@@ -19,14 +19,13 @@ RUN make && make install
 RUN strip -s /usr/local/sbin/unbound
 RUN strip -s /usr/local/sbin/unbound-host
 RUN strip -s /usr/local/lib/libunbound.so.8
+RUN setcap 'cap_net_bind_service=+ep' /usr/local/sbin/unbound
 
-FROM gcr.io/distroless/base
-COPY --from=build_env /usr/local/sbin/unbound /sbin/unbound
-COPY --from=build_env /usr/local/sbin/unbound-host /sbin/unbound-host
+FROM gcr.io/distroless/base-debian10:nonroot
+COPY --from=build_env /usr/local/sbin/unbound /bin/unbound
+COPY --from=build_env /usr/local/sbin/unbound-host /bin/unbound-host
 COPY --from=build_env /usr/local/lib/libunbound.so.8 /lib/x86_64-linux-gnu/
-COPY --from=build_env /usr/local/lib/libcrypto.so.1.1 /lib/x86_64-linux-gnu/
-COPY --from=build_env /usr/local/lib/libssl.so.1.1 /lib/x86_64-linux-gnu/
 
-HEALTHCHECK CMD ["/sbin/unbound-host", "-r", "g.co"]
+HEALTHCHECK CMD ["/bin/unbound-host", "-r", "g.co"]
 
-ENTRYPOINT ["/sbin/unbound", "-p"]
+ENTRYPOINT ["/bin/unbound", "-p"]
