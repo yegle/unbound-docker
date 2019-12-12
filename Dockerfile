@@ -22,10 +22,8 @@ RUN strip -s /usr/local/lib/libunbound.so.8
 #RUN setcap 'cap_net_bind_service=+ep' /usr/local/sbin/unbound
 
 # Unfortunately copying file from another container during multi-stage build
-# won't preserve the extended attributes, thus I can't use the nonroot image,
-# and there's no :latest image that I can use.
-# Use :debug build for now.
-FROM gcr.io/distroless/base-debian10:debug
+# won't preserve the extended attributes, thus I can't use the nonroot image.
+FROM gcr.io/distroless/base-debian10
 COPY --from=build_env /usr/local/sbin/unbound /bin/unbound
 COPY --from=build_env /usr/local/sbin/unbound-host /bin/unbound-host
 COPY --from=build_env /usr/local/lib/libunbound.so.8 /lib/x86_64-linux-gnu/
