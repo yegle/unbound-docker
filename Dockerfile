@@ -1,6 +1,6 @@
 FROM debian:buster as build_env
 ARG SOURCE_BRANCH
-ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.11.0}
+ENV SOURCE_BRANCH=${SOURCE_BRANCH:-1.12.0}
 
 ENV UNBOUND_URL https://nlnetlabs.nl/downloads/unbound/unbound-${SOURCE_BRANCH}.tar.gz
 
